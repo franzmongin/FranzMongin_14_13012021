@@ -4,6 +4,7 @@ import store from "./store/store.js";
 
 import "./App.css";
 import HomePage from "./pages/HomePage/HomePage";
+import CurrentEmployees from "./pages/CurrentEmployees/CurrentEmployees.jsx";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <div className="App">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/current" element={<CurrentEmployees />} />
           </Routes>
         </div>
       </BrowserRouter>

@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 
 function CurrentEmployees() {
-  //   useEffect(() => {});
   let employees = JSON.parse(localStorage.getItem("employees"));
-  console.log(employees);
   let columns = [
     { title: "First Name", data: "firstName" },
     { title: "Last Name", data: "lastName" },

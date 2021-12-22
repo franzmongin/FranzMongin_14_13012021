@@ -53,14 +53,14 @@ function HomePage() {
           <label htmlFor="date-of-birth">Date of Birth</label>
           <input
             id="date-of-birth"
-            type="text"
+            type="date"
             onChange={(e) => setbirthDateInput(e.target.value)}
           />
 
           <label htmlFor="start-date">Start Date</label>
           <input
             id="start-date"
-            type="text"
+            type="date"
             onChange={(e) => setstartDateInput(e.target.value)}
           />
 

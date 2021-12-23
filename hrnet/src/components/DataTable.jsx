@@ -5,6 +5,8 @@ function DataTable({ data, columns }) {
   const [tabledata, settabledata] = useState(data);
   const [activeSorting, setactiveSorting] = useState("");
   const [sortingDirection, setsortingDirection] = useState("asc");
+
+  //sort data ascending
   const sortAsc = () => {
     settabledata(
       data.slice().sort((a, b) => {
@@ -21,6 +23,8 @@ function DataTable({ data, columns }) {
       })
     );
   };
+
+  //sort data descending
   const sortDesc = () => {
     settabledata(
       data.slice().sort((a, b) => {
@@ -69,9 +73,13 @@ function DataTable({ data, columns }) {
           <tr>
             {columns.map((column) => {
               return (
-                <React.Fragment key={`column-title${column.title}`}>
+                <React.Fragment key={`column-title-${column.title}`}>
                   <th
-                    className={`sorting`}
+                    className={`sorting ${
+                      column.data === activeSorting
+                        ? `sorting_${sortingDirection}`
+                        : ``
+                    }`}
                     id={`sorting-${column.data}`}
                     onClick={(e) => handleChangeSorting(e)}
                   >

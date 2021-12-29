@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import DataTable from "../../components/DataTable";
+import DataTable from "../../components/DataTable/DataTable";
 
 function CurrentEmployees() {
   let employees = JSON.parse(localStorage.getItem("employees"));

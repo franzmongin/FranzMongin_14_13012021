@@ -27,6 +27,13 @@ function HomePage() {
     employees.push(employee);
     localStorage.setItem("employees", JSON.stringify(employees));
   };
+  const formatDateInputs = (value) => {
+    let dateParts = value.split("-");
+    let year = dateParts[0];
+    let month = dateParts[1];
+    let day = dateParts[2];
+    return day + "/" + month + "/" + year;
+  };
   return (
     <div className="home-page page">
       <div className="title">
@@ -54,14 +61,18 @@ function HomePage() {
           <input
             id="date-of-birth"
             type="date"
-            onChange={(e) => setbirthDateInput(e.target.value)}
+            onChange={(e) =>
+              setbirthDateInput(formatDateInputs(e.target.value))
+            }
           />
 
           <label htmlFor="start-date">Start Date</label>
           <input
             id="start-date"
             type="date"
-            onChange={(e) => setstartDateInput(e.target.value)}
+            onChange={(e) =>
+              setstartDateInput(formatDateInputs(e.target.value))
+            }
           />
 
           <fieldset className="address">

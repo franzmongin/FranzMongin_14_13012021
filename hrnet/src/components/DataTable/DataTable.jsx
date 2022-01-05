@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import "./DataTable.css";
+import Pagination from "./Pagination/Pagination";
 import Search from "./Search/Search";
 import TableBody from "./TableBody/TableBody";
 import TableHeading from "./TableHeading/TableHeading";
 
 function DataTable({ data, columns }) {
+  const numberOfRows = useSelector((state) => state.numberOfRows);
+
+  let currentPage = data
   const [tabledata, settabledata] = useState(data);
   const [activeSorting, setactiveSorting] = useState("");
   const [sortingDirection, setsortingDirection] = useState("asc");
@@ -49,6 +54,8 @@ function DataTable({ data, columns }) {
     }
   }, [activeSorting, sortingDirection]);
 
+  useEffect(() => {}, [numberOfRows]);
+
   // function to handle the click on a sorting heading
   const handleChangeSorting = (e) => {
     const classNames = e.target.classList;
@@ -69,6 +76,7 @@ function DataTable({ data, columns }) {
   };
   return (
     <div id="employee-table_wrapper" className="dataTables_wrapper no-footer">
+      <Pagination />
       <Search
         tabledata={tabledata}
         settabledata={settabledata}

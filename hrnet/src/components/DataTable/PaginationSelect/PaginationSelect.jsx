@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import "./Pagination.css";
+import "./PaginationSelect.css";
 import { useSelector, useDispatch } from "react-redux";
 import { changeNumberOfRows } from "../../../features/employees/employeesSlice";
 
-function Pagination() {
-  const [currentPage, setcurrentPage] = useState(1);
+function PaginationSelect() {
   const dispatch = useDispatch();
-  const handleChangePagination = (e) => {
+  const handleChangePaginationSelect = (e) => {
     dispatch(changeNumberOfRows(e.target.value));
   };
   return (
@@ -16,8 +15,8 @@ function Pagination() {
         <select
           name="employee-table_length"
           aria-controls="employee-table"
-          className="pagination-select"
-          onChange={handleChangePagination}
+          className="PaginationSelect-select"
+          onChange={handleChangePaginationSelect}
         >
           <option value="10">10</option>
           <option value="25">25</option>
@@ -30,4 +29,4 @@ function Pagination() {
   );
 }
 
-export default Pagination;
+export default PaginationSelect;

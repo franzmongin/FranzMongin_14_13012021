@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import "./DataTable.css";
-import Pagination from "./Pagination/Pagination";
+import PaginationSelect from "./PaginationSelect/PaginationSelect";
+import PageChanger from "./PageChanger/PageChanger";
 import Search from "./Search/Search";
 import TableBody from "./TableBody/TableBody";
 import TableHeading from "./TableHeading/TableHeading";
 
 function DataTable({ data, columns }) {
-  const numberOfRows = useSelector((state) => state.numberOfRows);
+  const numberOfRows = useSelector((state) => state.employees.numberOfRows);
+  const currentPage = useSelector((state) => state.employees.currentPage);
 
-  let currentPage = data
-  const [tabledata, settabledata] = useState(data);
+  const batchDataWithPaginationSelect = (arr, size) => {
+    let myArray = [];
+    for (var i = 0; i < arr.length; i += size) {
+      myArray.push(arr.slice(i, i + size));
+    }
+    return myArray;
+  };
+  let batchedData = batchDataWithPaginationSelect(data, numberOfRows);
+
+  const [numberOfEmployees, setnumberOfEmployees] = useState(data.length);
+  const [tabledata, settabledata] = useState(batchedData[currentPage - 1]);
   const [activeSorting, setactiveSorting] = useState("");
   const [sortingDirection, setsortingDirection] = useState("asc");
   const [searchActive, setsearchActive] = useState(false);
@@ -76,7 +87,7 @@ function DataTable({ data, columns }) {
   };
   return (
     <div id="employee-table_wrapper" className="dataTables_wrapper no-footer">
-      <Pagination />
+      <PaginationSelect />
       <Search
         tabledata={tabledata}
         settabledata={settabledata}
@@ -96,6 +107,7 @@ function DataTable({ data, columns }) {
           handleChangeSorting={handleChangeSorting}
         />
         <TableBody tabledata={tabledata} columns={columns} />
+        <PageChanger numberOfEmployees={numberOfEmployees} />
       </table>
     </div>
   );

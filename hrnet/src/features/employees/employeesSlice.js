@@ -5,6 +5,7 @@ const employeesSlice = createSlice({
   initialState: {
     numberOfRows: 10,
     currentPage: 1,
+    maxPage: 0,
   },
   reducers: {
     changeNumberOfRows: (state, action) => {
@@ -14,13 +15,19 @@ const employeesSlice = createSlice({
       state.currentPage = action.payload;
     },
     increaseCurrentPage: (state, action) => {
+      if (state.currentPage === state.maxPage) {
+        return;
+      }
       state.currentPage += 1;
     },
     decreaseCurrentPage: (state, action) => {
-      if(state.currentPage === 1){
-        return
+      if (state.currentPage === 1) {
+        return;
       }
       state.currentPage -= 1;
+    },
+    setMaxPage: (state, action) => {
+      state.maxPage = action.payload;
     },
   },
 });
@@ -30,4 +37,5 @@ export const {
   changeCurrentPage,
   increaseCurrentPage,
   decreaseCurrentPage,
+  setMaxPage,
 } = employeesSlice.actions;

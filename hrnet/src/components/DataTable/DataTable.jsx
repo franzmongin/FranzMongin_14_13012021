@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "./DataTable.css";
 import PaginationSelect from "./PaginationSelect/PaginationSelect";
 import PageChanger from "./PageChanger/PageChanger";
 import Search from "./Search/Search";
 import TableBody from "./TableBody/TableBody";
 import TableHeading from "./TableHeading/TableHeading";
+import { setMaxPage } from "../../features/employees/employeesSlice";
 
 function DataTable({ data, columns }) {
   const numberOfRows = useSelector((state) => state.employees.numberOfRows);
@@ -18,14 +19,25 @@ function DataTable({ data, columns }) {
     }
     return myArray;
   };
-  let batchedData = batchDataWithPaginationSelect(data, numberOfRows);
+  const dispatch = useDispatch();
 
-  const [numberOfEmployees, setnumberOfEmployees] = useState(data.length);
+  const batchedArray = batchDataWithPaginationSelect(data, numberOfRows);
+  const [batchedData, setbatchedData] = useState(batchedArray);
+  const numberOfEmployees = data.length;
   const [tabledata, settabledata] = useState(batchedData[currentPage - 1]);
   const [activeSorting, setactiveSorting] = useState("");
   const [sortingDirection, setsortingDirection] = useState("asc");
   const [searchActive, setsearchActive] = useState(false);
-
+  useEffect(() => {
+    settabledata(batchedData[currentPage - 1]);
+  }, [currentPage]);
+  useEffect(() => {
+    if (batchedArray !== "undefined") {
+      console.log(batchedArray.length);
+      console.log(batchedArray.length);
+      dispatch(setMaxPage(batchedArray.length));
+    }
+  });
   //sort data ascending
   const sortAsc = (data) => {
     return data.slice().sort((a, b) => {
@@ -97,7 +109,6 @@ function DataTable({ data, columns }) {
         sortDesc={sortDesc}
         activeSorting={activeSorting}
         sortingDirection={sortingDirection}
-        tabledata={tabledata}
       />
       <table className="dataTable display no-footer">
         <TableHeading
@@ -107,8 +118,11 @@ function DataTable({ data, columns }) {
           handleChangeSorting={handleChangeSorting}
         />
         <TableBody tabledata={tabledata} columns={columns} />
-        <PageChanger numberOfEmployees={numberOfEmployees} />
       </table>
+      <PageChanger
+        numberOfEmployees={numberOfEmployees}
+        tableDataLength={tabledata.length}
+      />
     </div>
   );
 }

@@ -1,11 +1,21 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   increaseCurrentPage,
   decreaseCurrentPage,
 } from "../../../features/employees/employeesSlice";
+import TableBody from "../TableBody/TableBody";
 
-function PageChanger({ numberOfEmployees }) {
+function PageChanger({ numberOfEmployees, tableDataLength }) {
+  const numberOfRows = useSelector((state) => state.employees.numberOfRows);
+  const currentPage = useSelector((state) => state.employees.currentPage);
+  console.log(numberOfEmployees, currentPage);
+
+  let beginOfChunk = numberOfRows * currentPage - numberOfRows;
+  let endOfChunk = numberOfRows * currentPage;
+  if (tableDataLength < numberOfRows) {
+    endOfChunk = numberOfEmployees;
+  }
   const dispatch = useDispatch();
   const handlePreviousPage = () => {
     dispatch(decreaseCurrentPage());
@@ -21,7 +31,7 @@ function PageChanger({ numberOfEmployees }) {
         role="status"
         aria-live="polite"
       >
-        Showing 1 to 1 of {numberOfEmployees} entries
+        Showing {beginOfChunk} to {endOfChunk} of {numberOfEmployees} entries
       </div>
       <div
         className="dataTables_paginate paging_simple_numbers"

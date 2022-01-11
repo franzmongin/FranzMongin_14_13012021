@@ -6,7 +6,10 @@ import PageChanger from "./PageChanger/PageChanger";
 import Search from "./Search/Search";
 import TableBody from "./TableBody/TableBody";
 import TableHeading from "./TableHeading/TableHeading";
-import { setMaxPage } from "../../features/employees/employeesSlice";
+import {
+  setMaxPage,
+  changeCurrentPage,
+} from "../../features/employees/employeesSlice";
 
 function DataTable({ data, columns }) {
   const numberOfRows = useSelector((state) => state.employees.numberOfRows);
@@ -21,26 +24,37 @@ function DataTable({ data, columns }) {
   };
   const dispatch = useDispatch();
 
-  const batchedArray = batchDataWithPaginationSelect(data, numberOfRows);
-  const [batchedData, setbatchedData] = useState(batchedArray);
-  const numberOfEmployees = data.length;
-  const [tabledata, settabledata] = useState(batchedData[currentPage - 1]);
-  const [activeSorting, setactiveSorting] = useState("");
-  const [sortingDirection, setsortingDirection] = useState("asc");
-  const [searchActive, setsearchActive] = useState(false);
   useEffect(() => {
     settabledata(batchedData[currentPage - 1]);
   }, [currentPage]);
   useEffect(() => {
-    if (batchedArray !== "undefined") {
-      console.log(batchedArray.length);
-      console.log(batchedArray.length);
-      dispatch(setMaxPage(batchedArray.length));
+    if (batchedData !== "undefined") {
+      dispatch(setMaxPage(batchedData.length));
     }
   });
+  const [rawData, setrawData] = useState(data);
+  const [rawDataWithSearch, setrawDataWithSearch] = useState(rawData)
+  const [batchedData, setbatchedData] = useState(
+    batchDataWithPaginationSelect(rawData, numberOfRows)
+  );
+  const numberOfEmployees = rawData.length;
+  const [tabledata, settabledata] = useState(batchedData[currentPage - 1]);
+  const [activeSorting, setactiveSorting] = useState("");
+  const [sortingDirection, setsortingDirection] = useState("asc");
+  const [searchActive, setsearchActive] = useState(false);
+
+  //trigger batch when number of rows select changes
+  useEffect(() => {
+    setbatchedData(batchDataWithPaginationSelect(rawData, numberOfRows));
+  }, [numberOfRows]);
+
+  useEffect(() => {
+    settabledata(batchedData[currentPage - 1]);
+  }, [batchedData]);
+
   //sort data ascending
-  const sortAsc = (data) => {
-    return data.slice().sort((a, b) => {
+  const sortAsc = (dat) => {
+    return dat.slice().sort((a, b) => {
       let fa = a[activeSorting].toLowerCase(),
         fb = b[activeSorting].toLowerCase();
 
@@ -55,8 +69,8 @@ function DataTable({ data, columns }) {
   };
 
   //sort data descending
-  const sortDesc = (data) => {
-    return data.slice().sort((a, b) => {
+  const sortDesc = (dat) => {
+    return dat.slice().sort((a, b) => {
       let fa = a[activeSorting].toLowerCase(),
         fb = b[activeSorting].toLowerCase();
 
@@ -71,28 +85,35 @@ function DataTable({ data, columns }) {
   };
   useEffect(() => {
     if (activeSorting) {
-      sortingDirection === "asc"
-        ? settabledata(sortAsc(tabledata))
-        : settabledata(sortDesc(tabledata));
+      if (sortingDirection === "asc") {
+        console.log(sortAsc(rawData));
+        setbatchedData(
+          batchDataWithPaginationSelect(sortAsc(rawData), numberOfRows)
+        );
+        dispatch(changeCurrentPage(1));
+      } else {
+        console.log(
+          batchDataWithPaginationSelect(sortDesc(rawData), numberOfRows)
+        );
+        setbatchedData(
+          batchDataWithPaginationSelect(sortDesc(rawData), numberOfRows)
+        );
+        dispatch(changeCurrentPage(1));
+      }
     }
   }, [activeSorting, sortingDirection]);
-
-  useEffect(() => {}, [numberOfRows]);
 
   // function to handle the click on a sorting heading
   const handleChangeSorting = (e) => {
     const classNames = e.target.classList;
 
     if (classNames.contains("sorting_asc")) {
-      // e.target.classList.replace("sorting_asc", "sorting_desc");
       setactiveSorting(e.target.id.split("sorting-")[1]);
       setsortingDirection("desc");
     } else if (
       classNames.contains("sorting_desc") ||
       !classNames.contains("sorting_asc" || "sorting_desc")
     ) {
-      // e.target.classList.add("sorting_asc");
-      // e.target.classList.remove("sorting_desc");
       setactiveSorting(e.target.id.split("sorting-")[1]);
       setsortingDirection("asc");
     }
@@ -103,7 +124,7 @@ function DataTable({ data, columns }) {
       <Search
         tabledata={tabledata}
         settabledata={settabledata}
-        data={data}
+        data={rawData}
         setsearchActive={setsearchActive}
         sortAsc={sortAsc}
         sortDesc={sortDesc}

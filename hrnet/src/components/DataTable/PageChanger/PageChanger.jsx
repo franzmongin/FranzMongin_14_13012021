@@ -19,7 +19,6 @@ function PageChanger({
   }
   let lessOrEqualToFivePagesJsx = [];
   const handleChangePage = (e) => {
-    console.log(e.target.textContent);
     setcurrentPage(parseInt(e.target.textContent));
   };
   for (let i = 0; i < maxPage; i++) {
@@ -69,7 +68,7 @@ function PageChanger({
           Previous
         </button>
         <span>
-          {maxPage <= 5 ? (
+          {maxPage <= 7 ? (
             <>
               {lessOrEqualToFivePagesJsx.map((el, index) => {
                 return (
@@ -81,7 +80,7 @@ function PageChanger({
             </>
           ) : null}
           {/* Page courante entre 1 et 4 */}
-          {currentPage < 5 && maxPage > 5 ? (
+          {currentPage < 5 && maxPage > 7 ? (
             <>
               <span>vers le début</span>
               <button
@@ -147,7 +146,7 @@ function PageChanger({
           ) : null}
 
           {/* quatre dernières pages  */}
-          {currentPage > maxPage - 4 && maxPage > 5 ? (
+          {currentPage > maxPage - 4 && maxPage > 7  ? (
             <>
               <span>vers la fin</span>
               <button

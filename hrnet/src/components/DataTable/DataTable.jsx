@@ -13,6 +13,7 @@ function DataTable({ data, columns }) {
 
   // function to batch data with a given number of rows per page
   const batchDataWithPaginationSelect = (arr, size) => {
+    size = parseInt(size);
     let myArray = [];
     for (var i = 0; i < arr.length; i += size) {
       myArray.push(arr.slice(i, i + size));
@@ -30,6 +31,7 @@ function DataTable({ data, columns }) {
   const [batchedData, setbatchedData] = useState(
     batchDataWithPaginationSelect(rawDataWithSearch, numberOfRows)
   );
+
   let numberOfEmployees = rawDataWithSearch.length;
 
   // change batched data on each search change
@@ -37,7 +39,6 @@ function DataTable({ data, columns }) {
     setbatchedData(
       batchDataWithPaginationSelect(rawDataWithSearch, numberOfRows)
     );
-    console.log(tabledata);
   }, [rawDataWithSearch]);
 
   // data of the current page
@@ -64,6 +65,7 @@ function DataTable({ data, columns }) {
 
   // on batchedData change, set the max Page again, and set the current page data
   useEffect(() => {
+    console.log(batchDataWithPaginationSelect(rawDataWithSearch, numberOfRows));
     if (batchedData !== "undefined") {
       setmaxPage(batchedData.length);
     }
@@ -116,7 +118,6 @@ function DataTable({ data, columns }) {
   useEffect(() => {
     if (activeSorting) {
       if (sortingDirection === "asc") {
-        console.log(sortAsc(rawDataWithSearch));
         setbatchedData(
           batchDataWithPaginationSelect(
             sortAsc(rawDataWithSearch),
@@ -125,12 +126,6 @@ function DataTable({ data, columns }) {
         );
         setcurrentPage(1);
       } else {
-        console.log(
-          batchDataWithPaginationSelect(
-            sortDesc(rawDataWithSearch),
-            numberOfRows
-          )
-        );
         setbatchedData(
           batchDataWithPaginationSelect(
             sortDesc(rawDataWithSearch),
@@ -144,7 +139,7 @@ function DataTable({ data, columns }) {
 
   return (
     <div id="employee-table_wrapper" className="dataTables_wrapper no-footer">
-      <PaginationSelect setnumberOfRows={setnumberOfRows} />
+      <PaginationSelect setnumberOfRows={setnumberOfRows} setcurrentPage={setcurrentPage} />
       <Search
         tabledata={tabledata}
         setrawDataWithSearch={setrawDataWithSearch}

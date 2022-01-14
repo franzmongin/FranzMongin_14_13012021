@@ -22,21 +22,15 @@ function Search({
           value.toLowerCase().includes(searchInput.toLowerCase())
         );
       });
-      console.log(filteredData);
-      console.log(filteredData.length);
 
       // if active sorting set result after sorting else set result without sorting
       if (activeSorting) {
-        console.log(sortAsc(filteredData));
-        console.log(sortDesc(filteredData));
         if (sortingDirection === "asc") {
           setrawDataWithSearch(sortAsc(filteredData));
         } else {
-          console.log("coucou");
           setrawDataWithSearch(sortDesc(filteredData));
         }
       } else {
-        console.log("couou");
         setrawDataWithSearch(filteredData);
       }
 
@@ -50,9 +44,6 @@ function Search({
         setrawDataWithSearch(data);
       }
     }
-    console.log("tabledata", tabledata);
-    console.log("activeSorting", activeSorting);
-    console.log("sortingDirection", sortingDirection);
   }, [searchInput]);
   return (
     <div id="employee-table_filter" className="dataTables_filter">

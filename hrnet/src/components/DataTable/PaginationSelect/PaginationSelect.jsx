@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./PaginationSelect.css";
 
-function PaginationSelect({ setnumberOfRows }) {
+function PaginationSelect({ setnumberOfRows, setcurrentPage }) {
   const handleChangePaginationSelect = (e) => {
     setnumberOfRows(e.target.value);
+    setcurrentPage(1); 
   };
   return (
     <div className="dataTables_length" id="employee-table_length">

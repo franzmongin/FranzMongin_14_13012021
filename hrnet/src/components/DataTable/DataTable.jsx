@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import "./DataTable.css";
 import PaginationSelect from "./PaginationSelect/PaginationSelect";
 import PageChanger from "./PageChanger/PageChanger";
 import Search from "./Search/Search";
 import TableBody from "./TableBody/TableBody";
 import TableHeading from "./TableHeading/TableHeading";
-import {
-  setMaxPage,
-  changeCurrentPage,
-} from "../../features/employees/employeesSlice";
 
 function DataTable({ data, columns }) {
-  const numberOfRows = useSelector((state) => state.employees.numberOfRows);
-  const currentPage = useSelector((state) => state.employees.currentPage);
+  const [numberOfRows, setnumberOfRows] = useState(10);
+  const [currentPage, setcurrentPage] = useState(1);
+  const [maxPage, setmaxPage] = useState(0);
 
+  // function to batch data with a given number of rows per page
   const batchDataWithPaginationSelect = (arr, size) => {
     let myArray = [];
     for (var i = 0; i < arr.length; i += size) {
@@ -22,35 +19,67 @@ function DataTable({ data, columns }) {
     }
     return myArray;
   };
-  const dispatch = useDispatch();
 
+  // raw data coming from props
+  const [rawData, setrawData] = useState(data);
+
+  // raw data filtering by search input
+  const [rawDataWithSearch, setrawDataWithSearch] = useState(rawData);
+
+  // data after pagination
+  const [batchedData, setbatchedData] = useState(
+    batchDataWithPaginationSelect(rawDataWithSearch, numberOfRows)
+  );
+  let numberOfEmployees = rawDataWithSearch.length;
+
+  // change batched data on each search change
+  useEffect(() => {
+    setbatchedData(
+      batchDataWithPaginationSelect(rawDataWithSearch, numberOfRows)
+    );
+    console.log(tabledata);
+  }, [rawDataWithSearch]);
+
+  // data of the current page
+  const [tabledata, settabledata] = useState(batchedData[currentPage - 1]);
+
+  // number of rows on the current page
+  let tabledataLength;
+  if (tabledata === undefined) {
+    tabledataLength = 0;
+  } else {
+    tabledataLength = tabledata.length;
+  }
+
+  // which sorting is active
+  const [activeSorting, setactiveSorting] = useState("");
+
+  // which sorting direction is active
+  const [sortingDirection, setsortingDirection] = useState("asc");
+
+  // change currentpage data with new current page
   useEffect(() => {
     settabledata(batchedData[currentPage - 1]);
   }, [currentPage]);
+
+  // on batchedData change, set the max Page again, and set the current page data
   useEffect(() => {
     if (batchedData !== "undefined") {
-      dispatch(setMaxPage(batchedData.length));
+      setmaxPage(batchedData.length);
     }
-  });
-  const [rawData, setrawData] = useState(data);
-  const [rawDataWithSearch, setrawDataWithSearch] = useState(rawData)
-  const [batchedData, setbatchedData] = useState(
-    batchDataWithPaginationSelect(rawData, numberOfRows)
-  );
-  const numberOfEmployees = rawData.length;
-  const [tabledata, settabledata] = useState(batchedData[currentPage - 1]);
-  const [activeSorting, setactiveSorting] = useState("");
-  const [sortingDirection, setsortingDirection] = useState("asc");
-  const [searchActive, setsearchActive] = useState(false);
+    if (batchedData[currentPage - 1] === "undefined") {
+      settabledata(0);
+    } else {
+      settabledata(batchedData[currentPage - 1]);
+    }
+  }, [batchedData]);
 
   //trigger batch when number of rows select changes
   useEffect(() => {
-    setbatchedData(batchDataWithPaginationSelect(rawData, numberOfRows));
+    setbatchedData(
+      batchDataWithPaginationSelect(rawDataWithSearch, numberOfRows)
+    );
   }, [numberOfRows]);
-
-  useEffect(() => {
-    settabledata(batchedData[currentPage - 1]);
-  }, [batchedData]);
 
   //sort data ascending
   const sortAsc = (dat) => {
@@ -83,49 +112,43 @@ function DataTable({ data, columns }) {
       return 0;
     });
   };
+
   useEffect(() => {
     if (activeSorting) {
       if (sortingDirection === "asc") {
-        console.log(sortAsc(rawData));
+        console.log(sortAsc(rawDataWithSearch));
         setbatchedData(
-          batchDataWithPaginationSelect(sortAsc(rawData), numberOfRows)
+          batchDataWithPaginationSelect(
+            sortAsc(rawDataWithSearch),
+            numberOfRows
+          )
         );
-        dispatch(changeCurrentPage(1));
+        setcurrentPage(1);
       } else {
         console.log(
-          batchDataWithPaginationSelect(sortDesc(rawData), numberOfRows)
+          batchDataWithPaginationSelect(
+            sortDesc(rawDataWithSearch),
+            numberOfRows
+          )
         );
         setbatchedData(
-          batchDataWithPaginationSelect(sortDesc(rawData), numberOfRows)
+          batchDataWithPaginationSelect(
+            sortDesc(rawDataWithSearch),
+            numberOfRows
+          )
         );
-        dispatch(changeCurrentPage(1));
+        setcurrentPage(1);
       }
     }
   }, [activeSorting, sortingDirection]);
 
-  // function to handle the click on a sorting heading
-  const handleChangeSorting = (e) => {
-    const classNames = e.target.classList;
-
-    if (classNames.contains("sorting_asc")) {
-      setactiveSorting(e.target.id.split("sorting-")[1]);
-      setsortingDirection("desc");
-    } else if (
-      classNames.contains("sorting_desc") ||
-      !classNames.contains("sorting_asc" || "sorting_desc")
-    ) {
-      setactiveSorting(e.target.id.split("sorting-")[1]);
-      setsortingDirection("asc");
-    }
-  };
   return (
     <div id="employee-table_wrapper" className="dataTables_wrapper no-footer">
-      <PaginationSelect />
+      <PaginationSelect setnumberOfRows={setnumberOfRows} />
       <Search
         tabledata={tabledata}
-        settabledata={settabledata}
+        setrawDataWithSearch={setrawDataWithSearch}
         data={rawData}
-        setsearchActive={setsearchActive}
         sortAsc={sortAsc}
         sortDesc={sortDesc}
         activeSorting={activeSorting}
@@ -136,13 +159,18 @@ function DataTable({ data, columns }) {
           columns={columns}
           activeSorting={activeSorting}
           sortingDirection={sortingDirection}
-          handleChangeSorting={handleChangeSorting}
+          setactiveSorting={setactiveSorting}
+          setsortingDirection={setsortingDirection}
         />
         <TableBody tabledata={tabledata} columns={columns} />
       </table>
       <PageChanger
         numberOfEmployees={numberOfEmployees}
-        tableDataLength={tabledata.length}
+        tableDataLength={tabledataLength}
+        numberOfRows={numberOfRows}
+        currentPage={currentPage}
+        maxPage={maxPage}
+        setcurrentPage={setcurrentPage}
       />
     </div>
   );

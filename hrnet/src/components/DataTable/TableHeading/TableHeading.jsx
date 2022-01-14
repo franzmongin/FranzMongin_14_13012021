@@ -4,8 +4,25 @@ function TableHeading({
   columns,
   activeSorting,
   sortingDirection,
-  handleChangeSorting,
- }) {
+  // handleChangeSorting,
+  setactiveSorting,
+  setsortingDirection,
+}) {
+  // function to handle the click on a sorting heading
+  const handleChangeSorting = (e) => {
+    const classNames = e.target.classList;
+
+    if (classNames.contains("sorting_asc")) {
+      setactiveSorting(e.target.id.split("sorting-")[1]);
+      setsortingDirection("desc");
+    } else if (
+      classNames.contains("sorting_desc") ||
+      !classNames.contains("sorting_asc" || "sorting_desc")
+    ) {
+      setactiveSorting(e.target.id.split("sorting-")[1]);
+      setsortingDirection("asc");
+    }
+  };
   return (
     <thead>
       <tr>

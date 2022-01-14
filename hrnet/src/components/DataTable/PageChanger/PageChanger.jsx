@@ -1,25 +1,26 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  increaseCurrentPage,
-  decreaseCurrentPage,
-  changeCurrentPage,
-} from "../../../features/employees/employeesSlice";
 
-function PageChanger({ numberOfEmployees, tableDataLength }) {
-  let numberOfRows = useSelector((state) => state.employees.numberOfRows);
-  let currentPage = useSelector((state) => state.employees.currentPage);
-  let maxPage = useSelector((state) => state.employees.maxPage);
-
+function PageChanger({
+  numberOfEmployees,
+  tableDataLength,
+  numberOfRows,
+  currentPage,
+  maxPage,
+  setcurrentPage,
+}) {
   let beginOfChunk = numberOfRows * currentPage - numberOfRows;
   let endOfChunk = numberOfRows * currentPage;
   if (tableDataLength < numberOfRows) {
     endOfChunk = numberOfEmployees;
   }
+  if (tableDataLength === 0) {
+    endOfChunk = 0;
+    beginOfChunk = 0;
+  }
   let lessOrEqualToFivePagesJsx = [];
   const handleChangePage = (e) => {
     console.log(e.target.textContent);
-    dispatch(changeCurrentPage(parseInt(e.target.textContent)));
+    setcurrentPage(parseInt(e.target.textContent));
   };
   for (let i = 0; i < maxPage; i++) {
     lessOrEqualToFivePagesJsx.push(
@@ -33,12 +34,11 @@ function PageChanger({ numberOfEmployees, tableDataLength }) {
       </button>
     );
   }
-  const dispatch = useDispatch();
   const handlePreviousPage = () => {
-    dispatch(decreaseCurrentPage());
+    setcurrentPage(currentPage - 1);
   };
   const handleNextPage = () => {
-    dispatch(increaseCurrentPage());
+    setcurrentPage(currentPage + 1);
   };
 
   return (
@@ -70,7 +70,15 @@ function PageChanger({ numberOfEmployees, tableDataLength }) {
         </button>
         <span>
           {maxPage <= 5 ? (
-            <>{lessOrEqualToFivePagesJsx.map((el, index) => el)}</>
+            <>
+              {lessOrEqualToFivePagesJsx.map((el, index) => {
+                return (
+                  <React.Fragment key={`page-changer-number${index}`}>
+                    {el}
+                  </React.Fragment>
+                );
+              })}
+            </>
           ) : null}
           {/* Page courante entre 1 et 4 */}
           {currentPage < 5 && maxPage > 5 ? (

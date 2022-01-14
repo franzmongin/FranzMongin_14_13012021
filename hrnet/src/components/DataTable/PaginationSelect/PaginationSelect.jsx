@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import "./PaginationSelect.css";
-import { useSelector, useDispatch } from "react-redux";
-import { changeNumberOfRows } from "../../../features/employees/employeesSlice";
 
-function PaginationSelect() {
-  const dispatch = useDispatch();
+function PaginationSelect({ setnumberOfRows }) {
   const handleChangePaginationSelect = (e) => {
-    dispatch(changeNumberOfRows(e.target.value));
+    setnumberOfRows(e.target.value);
   };
   return (
     <div className="dataTables_length" id="employee-table_length">

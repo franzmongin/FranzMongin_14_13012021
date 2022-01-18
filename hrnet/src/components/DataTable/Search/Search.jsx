@@ -8,6 +8,7 @@ function Search({
   activeSorting,
   sortDesc,
   sortAsc,
+  setcurrentPage,
 }) {
   const [searchInput, setsearchInput] = useState("");
   const handleChangeSearch = (e) => {
@@ -44,6 +45,7 @@ function Search({
         setrawDataWithSearch(data);
       }
     }
+    setcurrentPage(1);
   }, [searchInput]);
   return (
     <div id="employee-table_filter" className="dataTables_filter">

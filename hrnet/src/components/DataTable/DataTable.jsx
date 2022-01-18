@@ -148,6 +148,7 @@ function DataTable({ data, columns }) {
         sortDesc={sortDesc}
         activeSorting={activeSorting}
         sortingDirection={sortingDirection}
+        setcurrentPage={setcurrentPage}
       />
       <table className="dataTable display no-footer">
         <TableHeading

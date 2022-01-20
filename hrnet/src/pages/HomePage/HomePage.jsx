@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Modal from "../../components/DataTable/Modal/Modal";
+import { statesListJson } from "./states";
 
 function HomePage() {
   const [firstNameInput, setfirstNameInput] = useState("");
@@ -11,6 +13,9 @@ function HomePage() {
   const [stateInput, setstateInput] = useState("");
   const [zipCodeInput, setzipCodeInput] = useState("");
   const [departmentInput, setdepartmentInput] = useState("");
+  const [hiddenModal, sethiddenModal] = useState(true);
+  // const [statesList, setstatesList] = useState(statesListJson);
+
   const saveEmployees = () => {
     const employees = JSON.parse(localStorage.getItem("employees")) || [];
     const employee = {
@@ -26,6 +31,7 @@ function HomePage() {
     };
     employees.push(employee);
     localStorage.setItem("employees", JSON.stringify(employees));
+    sethiddenModal(false);
   };
   const formatDateInputs = (value) => {
     let dateParts = value.split("-");
@@ -97,7 +103,11 @@ function HomePage() {
               name="state"
               id="state"
               onChange={(e) => setstateInput(e.target.value)}
-            ></select>
+            >
+              {statesListJson.map((el) => {
+                return <option value={el.abbreviation}>{el.name}</option>;
+              })}
+            </select>
 
             <label htmlFor="zip-code">Zip Code</label>
             <input
@@ -123,9 +133,7 @@ function HomePage() {
 
         <button onClick={() => saveEmployees()}>Save</button>
       </div>
-      <div id="confirmation" className="modal">
-        Employee Created!
-      </div>
+      <Modal hiddenModal={hiddenModal} sethiddenModal={sethiddenModal} />
     </div>
   );
 }

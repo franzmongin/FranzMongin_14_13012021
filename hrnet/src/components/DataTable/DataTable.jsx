@@ -139,9 +139,11 @@ function DataTable({ data, columns }) {
 
   return (
     <div id="employee-table_wrapper" className="dataTables_wrapper no-footer">
-      <PaginationSelect setnumberOfRows={setnumberOfRows} setcurrentPage={setcurrentPage} />
+      <PaginationSelect
+        setnumberOfRows={setnumberOfRows}
+        setcurrentPage={setcurrentPage}
+      />
       <Search
-        tabledata={tabledata}
         setrawDataWithSearch={setrawDataWithSearch}
         data={rawData}
         sortAsc={sortAsc}

@@ -16,6 +16,8 @@ function HomePage() {
   const [hiddenModal, sethiddenModal] = useState(true);
   // const [statesList, setstatesList] = useState(statesListJson);
 
+
+  // function to save the employee on sumbitting the form
   const saveEmployees = () => {
     const employees = JSON.parse(localStorage.getItem("employees")) || [];
     const employee = {
@@ -33,6 +35,8 @@ function HomePage() {
     localStorage.setItem("employees", JSON.stringify(employees));
     sethiddenModal(false);
   };
+
+  // function to format yyyy-mm-dd date into dd/mm/yyyy date
   const formatDateInputs = (value) => {
     let dateParts = value.split("-");
     let year = dateParts[0];
@@ -40,6 +44,7 @@ function HomePage() {
     let day = dateParts[2];
     return day + "/" + month + "/" + year;
   };
+
   return (
     <div className="home-page page">
       <div className="title">

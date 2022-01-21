@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./PaginationSelect.css";
 
+// select dropdown to select how many rows per page we want to display
 function PaginationSelect({ setnumberOfRows, setcurrentPage }) {
   const handleChangePaginationSelect = (e) => {
     setnumberOfRows(e.target.value);

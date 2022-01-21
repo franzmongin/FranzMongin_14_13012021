@@ -1,5 +1,6 @@
 import React from "react";
 
+// contains the tbody of the current page table
 function TableBody({ tabledata, columns }) {
   return (
     <tbody>

@@ -115,6 +115,7 @@ function DataTable({ data, columns }) {
     });
   };
 
+  // sort data when we add a sorting on clicking on him
   useEffect(() => {
     if (activeSorting) {
       if (sortingDirection === "asc") {
@@ -124,7 +125,6 @@ function DataTable({ data, columns }) {
             numberOfRows
           )
         );
-        setcurrentPage(1);
       } else {
         setbatchedData(
           batchDataWithPaginationSelect(
@@ -132,8 +132,8 @@ function DataTable({ data, columns }) {
             numberOfRows
           )
         );
-        setcurrentPage(1);
       }
+      setcurrentPage(1);
     }
   }, [activeSorting, sortingDirection]);
 

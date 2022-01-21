@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Modal from "../../components/DataTable/Modal/Modal";
 import { statesListJson } from "./states";
 
+// page to add an Employee
 function HomePage() {
   const [firstNameInput, setfirstNameInput] = useState("");
   const [lastNameInput, setlastNameInput] = useState("");

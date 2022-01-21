@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import DataTable from "../../components/DataTable/DataTable";
 
+
+// page which displays the employees table
 function CurrentEmployees() {
   let employees = JSON.parse(localStorage.getItem("employees"));
   let columns = [
@@ -20,7 +22,6 @@ function CurrentEmployees() {
     <div className="current-employees page">
       <div id="employee-div" className="container">
         <h1>Current Employees</h1>
-        {/* <table id="employee-table" className="display"></table> */}
         {table}
         <Link to="/" className="">
           Home

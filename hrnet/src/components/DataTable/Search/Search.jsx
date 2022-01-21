@@ -14,6 +14,7 @@ function Search({
     setsearchInput(e.target.value);
   };
 
+  // effect to handle the search when the input changes
   useEffect(() => {
     // behaviour when input in empty
     if (searchInput !== "") {

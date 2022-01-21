@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+// component which contains the buttons to change the current page by a number or by a previous or next button to navigate between pages
 function PageChanger({
   numberOfEmployees,
   tableDataLength,
@@ -10,19 +11,44 @@ function PageChanger({
 }) {
   let beginOfChunk = numberOfRows * currentPage - numberOfRows;
   let endOfChunk = numberOfRows * currentPage;
+
+  //manage last page chunk if length of current page data is less than number of rows selected
   if (tableDataLength < numberOfRows) {
     endOfChunk = numberOfEmployees;
   }
+
+  // if current data is empty, set begin and end of chunk equal to 0
   if (tableDataLength === 0) {
     endOfChunk = 0;
     beginOfChunk = 0;
   }
-  let lessOrEqualToFivePagesJsx = [];
+
+  /**
+   * handler of page number click
+   * @param {*} e
+   */
   const handleChangePage = (e) => {
     setcurrentPage(parseInt(e.target.textContent));
   };
+
+  /**
+   * handler of previous page click
+   */
+  const handlePreviousPage = () => {
+    setcurrentPage(currentPage - 1);
+  };
+
+  /**
+   * handler of next page click
+   */
+  const handleNextPage = () => {
+    setcurrentPage(currentPage + 1);
+  };
+
+  // Page number buttons elements if number of pages is maximum 7
+  let lessOrEqualToSevenPagesJsx = [];
   for (let i = 0; i < maxPage; i++) {
-    lessOrEqualToFivePagesJsx.push(
+    lessOrEqualToSevenPagesJsx.push(
       <button
         className={`paginate_button${currentPage === i + 1 ? " current" : ""}`}
         aria-controls="employee-table"
@@ -33,12 +59,6 @@ function PageChanger({
       </button>
     );
   }
-  const handlePreviousPage = () => {
-    setcurrentPage(currentPage - 1);
-  };
-  const handleNextPage = () => {
-    setcurrentPage(currentPage + 1);
-  };
 
   return (
     <>
@@ -68,9 +88,10 @@ function PageChanger({
           Previous
         </button>
         <span>
+          {/* Nombre de pages total de maximum 7 */}
           {maxPage <= 7 ? (
             <>
-              {lessOrEqualToFivePagesJsx.map((el, index) => {
+              {lessOrEqualToSevenPagesJsx.map((el, index) => {
                 return (
                   <React.Fragment key={`page-changer-number${index}`}>
                     {el}
@@ -146,7 +167,7 @@ function PageChanger({
           ) : null}
 
           {/* quatre dernières pages  */}
-          {currentPage > maxPage - 4 && maxPage > 7  ? (
+          {currentPage > maxPage - 4 && maxPage > 7 ? (
             <>
               <span>vers la fin</span>
               <button
@@ -215,7 +236,7 @@ function PageChanger({
           ) : null}
 
           {/* entre la 5ème pages inclue et la cinquième dernière page inclue*/}
-          {currentPage >= 5 && currentPage <= maxPage - 4 && maxPage > 5 ? (
+          {currentPage >= 5 && currentPage <= maxPage - 4 && maxPage > 7 ? (
             <>
               <span>entre les deux</span>
               <button

@@ -1,5 +1,7 @@
 import React from "react";
 
+
+// contains the thead of the Datatable
 function TableHeading({
   columns,
   activeSorting,

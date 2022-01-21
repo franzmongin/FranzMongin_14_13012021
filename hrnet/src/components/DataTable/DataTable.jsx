@@ -34,7 +34,7 @@ function DataTable({ data, columns }) {
 
   let numberOfEmployees = rawDataWithSearch.length;
 
-  // change batched data on each search change
+  // change batched data (array of paginated data) on each search change
   useEffect(() => {
     setbatchedData(
       batchDataWithPaginationSelect(rawDataWithSearch, numberOfRows)

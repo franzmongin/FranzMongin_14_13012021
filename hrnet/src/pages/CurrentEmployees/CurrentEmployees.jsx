@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import DataTable from "../../components/DataTable/DataTable";
-
 
 // page which displays the employees table
 function CurrentEmployees() {
@@ -17,12 +16,11 @@ function CurrentEmployees() {
     { title: "State", data: "state" },
     { title: "Zip Code", data: "zipCode" },
   ];
-  let table = <DataTable data={employees} columns={columns} />;
   return (
     <div className="current-employees page">
       <div id="employee-div" className="container">
         <h1>Current Employees</h1>
-        {table}
+        <DataTable data={employees} columns={columns} />
         <Link to="/" className="">
           Home
         </Link>

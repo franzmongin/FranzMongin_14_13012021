@@ -6,7 +6,6 @@ function TableHeading({
   columns,
   activeSorting,
   sortingDirection,
-  // handleChangeSorting,
   setactiveSorting,
   setsortingDirection,
 }) {

@@ -11,12 +11,12 @@ function HomePage() {
   const [startDateInput, setstartDateInput] = useState("");
   const [streetInput, setstreetInput] = useState("");
   const [cityInput, setcityInput] = useState("");
-  const [stateInput, setstateInput] = useState("");
+  const [stateInput, setstateInput] = useState(
+    statesListJson[0]["abbreviation"]
+  );
   const [zipCodeInput, setzipCodeInput] = useState("");
-  const [departmentInput, setdepartmentInput] = useState("");
+  const [departmentInput, setdepartmentInput] = useState("Sales");
   const [hiddenModal, sethiddenModal] = useState(true);
-  // const [statesList, setstatesList] = useState(statesListJson);
-
 
   // function to save the employee on sumbitting the form
   const saveEmployees = () => {

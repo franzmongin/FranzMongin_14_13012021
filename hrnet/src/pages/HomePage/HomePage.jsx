@@ -110,8 +110,12 @@ function HomePage() {
               id="state"
               onChange={(e) => setstateInput(e.target.value)}
             >
-              {statesListJson.map((el) => {
-                return <option value={el.abbreviation}>{el.name}</option>;
+              {statesListJson.map((el, i) => {
+                return (
+                  <option value={el.abbreviation} key={`state-${i}`}>
+                    {el.name}
+                  </option>
+                );
               })}
             </select>
 

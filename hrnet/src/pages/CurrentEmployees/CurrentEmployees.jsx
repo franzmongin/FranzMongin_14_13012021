@@ -4,7 +4,13 @@ import DataTable from "../../components/DataTable/DataTable";
 
 // page which displays the employees table
 function CurrentEmployees() {
-  let employees = JSON.parse(localStorage.getItem("employees"));
+  let employees;
+  if (localStorage.getItem("employees")) {
+    employees = JSON.parse(localStorage.getItem("employees"));
+  } else {
+    employees = [];
+  }
+
   let columns = [
     { title: "First Name", data: "firstName" },
     { title: "Last Name", data: "lastName" },

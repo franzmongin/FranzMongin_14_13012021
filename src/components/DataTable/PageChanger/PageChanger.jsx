@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 // component which contains the buttons to change the current page by a number or by a previous or next button to navigate between pages
 function PageChanger({
-  numberOfEmployees,
+  numberOfEntries,
   tableDataLength,
   numberOfRows,
   currentPage,
@@ -14,7 +14,7 @@ function PageChanger({
 
   //manage last page chunk if length of current page data is less than number of rows selected
   if (tableDataLength < numberOfRows) {
-    endOfChunk = numberOfEmployees;
+    endOfChunk = numberOfEntries;
   }
 
   // if current data is empty, set begin and end of chunk equal to 0
@@ -72,7 +72,7 @@ function PageChanger({
         role="status"
         aria-live="polite"
       >
-        Showing {beginOfChunk} to {endOfChunk} of {numberOfEmployees} entries
+        Showing {beginOfChunk} to {endOfChunk} of {numberOfEntries} entries
       </div>
       <div
         className="dataTables_paginate paging_simple_numbers"

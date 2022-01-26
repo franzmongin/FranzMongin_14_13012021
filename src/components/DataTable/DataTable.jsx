@@ -32,7 +32,7 @@ function DataTable({ data, columns }) {
     batchDataWithPaginationSelect(rawDataWithSearch, numberOfRows)
   );
 
-  let numberOfEmployees = rawDataWithSearch.length;
+  let numberOfEntries = rawDataWithSearch.length;
 
   // change batched data (array of paginated data) on each search change
   useEffect(() => {
@@ -163,7 +163,7 @@ function DataTable({ data, columns }) {
         <TableBody tabledata={tabledata} columns={columns} />
       </table>
       <PageChanger
-        numberOfEmployees={numberOfEmployees}
+        numberOfEntries={numberOfEntries}
         tableDataLength={tabledataLength}
         numberOfRows={numberOfRows}
         currentPage={currentPage}

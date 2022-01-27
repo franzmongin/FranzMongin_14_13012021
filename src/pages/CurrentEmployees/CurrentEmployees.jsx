@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import DataTable from "../../components/DataTable/DataTable";
+import { Datatable } from "datatable_table_react_test";
 
 // page which displays the employees table
 function CurrentEmployees() {
@@ -26,7 +26,7 @@ function CurrentEmployees() {
     <div className="current-employees page">
       <div id="employee-div" className="container">
         <h1>Current Employees</h1>
-        <DataTable data={employees} columns={columns} />
+        <Datatable data={employees} columns={columns} />
         <Link to="/" className="">
           Home
         </Link>

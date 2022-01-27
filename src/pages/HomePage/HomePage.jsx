@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Modal from "../../components/DataTable/Modal/Modal";
+import Modal from "../../components/Modal/Modal";
 import { statesListJson } from "./states";
 
 // page to add an Employee

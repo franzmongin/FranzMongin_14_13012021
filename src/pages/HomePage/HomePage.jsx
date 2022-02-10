@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
 import { statesListJson } from "./states";
+import { Input, DatePicker, Form, Select, Button } from "antd";
+
+const { Option } = Select;
 
 // page to add an Employee
 function HomePage() {
@@ -19,7 +22,8 @@ function HomePage() {
   const [hiddenModal, sethiddenModal] = useState(true);
 
   // function to save the employee on sumbitting the form
-  const saveEmployees = () => {
+  const saveEmployees = (e) => {
+    console.log(e);
     const employees = JSON.parse(localStorage.getItem("employees")) || [];
     const employee = {
       firstName: firstNameInput,
@@ -37,14 +41,9 @@ function HomePage() {
     sethiddenModal(false);
   };
 
-  // function to format yyyy-mm-dd date into dd/mm/yyyy date
-  const formatDateInputs = (value) => {
-    let dateParts = value.split("-");
-    let year = dateParts[0];
-    let month = dateParts[1];
-    let day = dateParts[2];
-    return day + "/" + month + "/" + year;
-  };
+  const dateFormat = "DD/MM/YYYY";
+
+  const [form] = Form.useForm();
 
   return (
     <div className="home-page page">
@@ -54,94 +53,165 @@ function HomePage() {
       <div className="container">
         <Link to="/current">View Current Employees</Link>
         <h2>Create Employee</h2>
-        <form action="#" id="create-employee">
-          <label htmlFor="first-name">First Name</label>
-          <input
-            type="text"
-            id="first-name"
-            onChange={(e) => setfirstNameInput(e.target.value)}
-          />
-
-          <label htmlFor="last-name">Last Name</label>
-          <input
-            type="text"
-            id="last-name"
-            onChange={(e) => setlastNameInput(e.target.value)}
-          />
-
-          <label htmlFor="date-of-birth">Date of Birth</label>
-          <input
-            id="date-of-birth"
-            type="date"
-            onChange={(e) =>
-              setbirthDateInput(formatDateInputs(e.target.value))
-            }
-          />
-
-          <label htmlFor="start-date">Start Date</label>
-          <input
-            id="start-date"
-            type="date"
-            onChange={(e) =>
-              setstartDateInput(formatDateInputs(e.target.value))
-            }
-          />
-
+        <Form
+          form={form}
+          id="create-employee"
+          layout="vertical"
+          onFinish={(e) => saveEmployees(e)}
+          onValuesChange={(e, f) => {
+            console.log(e);
+          }}
+        >
+          <Form.Item
+            label="First Name"
+            rules={[
+              { required: true, message: "Please input your first name!" },
+            ]}
+            name="first-name"
+          >
+            <Input
+              type="text"
+              id="first-name"
+              onChange={(e) => setfirstNameInput(e.target.value)}
+              placeholder="First Name"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Last Name"
+            rules={[
+              { required: true, message: "Please input your last name!" },
+            ]}
+            name="last-name"
+          >
+            <Input
+              type="text"
+              id="last-name"
+              onChange={(e) => setlastNameInput(e.target.value)}
+              placeholder="Last Name"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Date Of Birth"
+            rules={[
+              { required: true, message: "Please input your birth date!" },
+            ]}
+            name="date-of-birth"
+          >
+            <DatePicker
+              id="date-of-birth"
+              type="date"
+              onChange={(_, f) => {
+                setbirthDateInput(f);
+              }}
+              placeholder="Date Of Birth"
+              format={dateFormat}
+            />
+          </Form.Item>
+          <Form.Item
+            label="Start Date"
+            rules={[
+              { required: true, message: "Please input your start date name!" },
+            ]}
+            name="start-date"
+          >
+            <DatePicker
+              id="start-date"
+              onChange={(_, f) => setstartDateInput(f)}
+              placeholder="Start Date"
+              format={dateFormat}
+            />
+          </Form.Item>
           <fieldset className="address">
             <legend>Address</legend>
 
-            <label htmlFor="street">Street</label>
-            <input
-              id="street"
-              type="text"
-              onChange={(e) => setstreetInput(e.target.value)}
-            />
-
-            <label htmlFor="city">City</label>
-            <input
-              id="city"
-              type="text"
-              onChange={(e) => setcityInput(e.target.value)}
-            />
-
-            <label htmlFor="state">State</label>
-            <select
-              name="state"
-              id="state"
-              onChange={(e) => setstateInput(e.target.value)}
+            <Form.Item
+              label="Street"
+              rules={[{ required: true, message: "Please input your street!" }]}
+              name="street"
             >
-              {statesListJson.map((el, i) => {
-                return (
-                  <option value={el.abbreviation} key={`state-${i}`}>
-                    {el.name}
-                  </option>
-                );
-              })}
-            </select>
+              <Input
+                id="street"
+                type="text"
+                onChange={(e) => setstreetInput(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item
+              label="City"
+              rules={[{ required: true, message: "Please input your city!" }]}
+              name="last-city"
+            >
+              <Input
+                id="city"
+                type="text"
+                onChange={(e) => setcityInput(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item
+              label="State"
+              rules={[{ required: true, message: "Please input your state!" }]}
+              name="state"
+              initialValue={stateInput}
+            >
+              <Select
+                name="state"
+                id="state"
+                onChange={(value) => setstateInput(value)}
+                style={{ width: "100%" }}
+              >
+                {statesListJson.map((el, i) => {
+                  return (
+                    <Option value={el.abbreviation} key={`state-${i}`}>
+                      {el.name}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
 
-            <label htmlFor="zip-code">Zip Code</label>
-            <input
-              id="zip-code"
-              type="number"
-              onChange={(e) => setzipCodeInput(e.target.value)}
-            />
+            <Form.Item
+              label="Zip Code"
+              rules={[
+                { required: true, message: "Please input your zip code!" },
+              ]}
+              name="zip-code"
+            >
+              <Input
+                id="zip-code"
+                type="number"
+                onChange={(e) => setzipCodeInput(e.target.value)}
+              />
+            </Form.Item>
           </fieldset>
 
-          <label htmlFor="department">Department</label>
-          <select
-            name="department"
-            id="department"
-            onChange={(e) => setdepartmentInput(e.target.value)}
+          <Form.Item
+            label="Department"
+            rules={[
+              { required: true, message: "Please input your department!" },
+            ]}
+            name="departement"
+            initialValue={departmentInput}
           >
-            <option>Sales</option>
-            <option>Marketing</option>
-            <option>Engineering</option>
-            <option>Human Resources</option>
-            <option>Legal</option>
-          </select>
-        </form>
-
-        <button onClick={() => saveEmployees()}>Save</button>
+            <Select
+              name="department"
+              id="department"
+              onChange={(value) => setdepartmentInput(value)}
+              style={{ width: "100%" }}
+            >
+              <Option value="sales">Sales</Option>
+              <Option value="marketing">Marketing</Option>
+              <Option value="Engineering">Engineering</Option>
+              <Option value="human resources">Human Resources</Option>
+              <Option value="legal">Legal</Option>
+            </Select>
+          </Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            // onSubmit={(e) => saveEmployees(e)}
+          >
+            Save Employee
+          </Button>
+        </Form>
       </div>
       <Modal hiddenModal={hiddenModal} sethiddenModal={sethiddenModal} />
     </div>
